@@ -40,4 +40,34 @@ function updateCurrentWeather(data) {
   `;
 }
 
+function updateSearchHistory(city) {
+  const listItem = document.createElement('li');
+  listItem.textContent = city;
+  listItem.addEventListener('click', function () {
+    getWeatherData(city);
+  });
+  searchHistory.appendChild(listItem);
 
+  saveSearchHistory();
+}
+
+function saveSearchHistory() {
+  const searchHistoryItems = Array.from(searchHistory.children).map(item => item.textContent);
+  localStorage.setItem('searchHistory', JSON.stringify(searchHistoryItems));
+}
+
+function loadSearchHistory() {
+  const savedHistory = JSON.parse(localStorage.getItem('searchHistory'));
+  if (savedHistory) {
+    savedHistory.forEach(city => {
+      const listItem = document.createElement('li');
+      listItem.textContent = city;
+      listItem.addEventListener('click', function () {
+        getWeatherData(city);
+      });
+      searchHistory.appendChild(listItem);
+    });
+  }
+}
+
+loadSearchHistory();
